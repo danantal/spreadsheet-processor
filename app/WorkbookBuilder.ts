@@ -57,8 +57,8 @@ const rangeToAoA = (sheet: WorkSheet, range: Range) => {
       const cellAddress = utils.encode_cell({ r: row, c: column });
       const cell = sheet[cellAddress] as CellObject;
 
-      if (cell != null && cell.w) {
-        rowData.push(cell.w);
+      if (cell != null) {
+        rowData.push(cell.v);
       }
     }
 
@@ -82,6 +82,7 @@ export const processSpreadsheet = async (file: File) => {
 
   const headerRange = utils.decode_range(`A3:${lastColumn}3`);
   const header = rangeToAoA(sheet, headerRange);
+
   header[0].unshift("Entity");
   builder.initializeHeader(header);
 
@@ -90,7 +91,7 @@ export const processSpreadsheet = async (file: File) => {
 
   for (let index = 0; index < result.length; index++) {
     const row = result[index];
-    row.unshift(operatingUnit.w as string);
+    row.unshift(operatingUnit.v?.toString() as string);
   }
 
   builder.addAoA(result);
